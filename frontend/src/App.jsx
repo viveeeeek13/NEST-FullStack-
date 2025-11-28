@@ -4,13 +4,11 @@ import "./App.css";
 export default function App() {
   const [isLogin, setIsLogin] = useState(true);
 
-  // form states
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
-  // LOGIN API
   const handleLogin = async () => {
     setMessage("");
 
@@ -56,8 +54,6 @@ export default function App() {
         <p className="subtitle">
           {isLogin ? "Login to continue" : "Join us today"}
         </p>
-
-        {/* SIGNUP NAME INPUT */}
         {!isLogin && (
           <div className="input-group">
             <label>Name</label>
@@ -69,8 +65,6 @@ export default function App() {
             />
           </div>
         )}
-
-        {/* EMAIL */}
         <div className="input-group">
           <label>Email</label>
           <input
@@ -80,8 +74,6 @@ export default function App() {
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-
-        {/* PASSWORD */}
         <div className="input-group">
           <label>Password</label>
           <input
@@ -91,19 +83,13 @@ export default function App() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-
-        {/* BUTTON */}
         <button
           className="login-btn"
           onClick={isLogin ? handleLogin : handleSignup}
         >
           {isLogin ? "Login" : "Sign Up"}
         </button>
-
-        {/* API Message */}
         {message && <p className="message">{message}</p>}
-
-        {/* SWITCH */}
         <p className="switch-text">
           {isLogin ? (
             <>
