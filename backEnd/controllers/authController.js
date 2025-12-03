@@ -2,8 +2,7 @@ import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
-// REGISTER
-export const register = async (req, res) => {
+export const signup = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
@@ -28,7 +27,6 @@ export const register = async (req, res) => {
   }
 };
 
-// LOGIN
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -48,16 +46,15 @@ export const login = async (req, res) => {
       expiresIn: "1h",
     });
 
-    return res.json({ token });
+    return res.status(200).json({ token });
   } catch (err) {
     return res.status(500).json({ message: "Server error", error: err.message });
   }
 };
 
-export const getUsers = async (req, res) => {
+export const me = async (req, res) => {
   try {
-    const users = await User.find({}, "-password");
-    return res.json({ users });
+    return res.json({ user: req.user });
   } catch (err) {
     return res.status(500).json({ message: "Server error", error: err.message });
   }

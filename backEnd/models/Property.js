@@ -1,0 +1,52 @@
+import mongoose from "mongoose";
+
+const propertySchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+
+    description: {
+      type: String,
+      required: true,
+    },
+
+    price: {
+      type: Number,
+      required: true,
+    },
+
+    location: {
+      type: String,
+      required: true,
+    },
+
+    guests: {
+      type: Number,
+      required: true,
+      default: 1,
+    },
+
+    amenities: {
+      type: [String],
+      default: [],
+    },
+
+    images: {
+      type: [String],
+      default: [],
+    },
+
+    host: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
+
+const Property = mongoose.model("Property", propertySchema);
+
+export default Property;
