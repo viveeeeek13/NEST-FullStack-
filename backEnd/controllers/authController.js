@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 
 export const signup = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
     if (!name || !email || !password)
       return res.status(400).json({ message: "All fields required" });
@@ -15,10 +15,13 @@ export const signup = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    const normalizedRole = role === "host" ? "host" : "guest";
+
     const user = await User.create({
       name,
       email,
       password: hashedPassword,
+      role: normalizedRole,
     });
 
     return res.status(201).json({ message: "Signup successful!" });

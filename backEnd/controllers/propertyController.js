@@ -6,6 +6,10 @@ export const createProperty = async (req, res) => {
     const { title, description, price, location, guests, amenities, images, city, image } =
       req.body;
 
+    if (!req.user || req.user.role !== "host") {
+      return res.status(403).json({ message: "Not authorized to create property" });
+    }
+
     const mappedLocation = location || city;
     const mappedImages = Array.isArray(images) ? images : (image ? [image] : []);
 

@@ -15,7 +15,7 @@ export default function AddProperty(){
         if(!localStorage.getItem("token")){
             navigate("/login")
         }
-    },[]);
+    },[navigate]);
 
     const handleAdd=async()=>{
         if(!title || !city || !price || !image || !description){

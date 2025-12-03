@@ -18,7 +18,7 @@ export default function Dashboard(){
         setUser(data.user);
       })
       .catch(() => navigate("/login"));
-    },[]);  
+    },[navigate]);  
     
 
     useEffect(()=>{
@@ -70,7 +70,7 @@ export default function Dashboard(){
                   ₹{p.price}/night
                 </p>
   
-                <button style={viewButton}>View Details</button>
+                <button style={viewButton} onClick={() => navigate(`/property/${p._id}`)}>View Details</button>
               </div>
             ))
           )}

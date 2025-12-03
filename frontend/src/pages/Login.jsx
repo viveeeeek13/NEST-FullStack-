@@ -21,7 +21,7 @@ export default function Login() {
       } else {
         setMsg(data.message || "Login failed");
       }
-    } catch (err) {
+    } catch {
       setMsg("Something went wrong");
     }
   };

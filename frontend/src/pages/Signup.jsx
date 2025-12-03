@@ -6,6 +6,7 @@ export default function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("guest");
   const [msg, setMsg] = useState("");
 
   const handleSignup = async () => {
@@ -15,7 +16,7 @@ export default function Signup() {
       const res = await fetch(`${API}/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ name, email, password, role }),
       });
 
       const data = await res.json();
@@ -26,7 +27,7 @@ export default function Signup() {
       } else {
         setMsg(data.message || "Signup failed");
       }
-    } catch (err) {
+    } catch {
       setMsg("Something went wrong");
     }
   };
@@ -75,6 +76,15 @@ export default function Signup() {
           onChange={(e) => setPassword(e.target.value)}
           style={inputStyle}
         />
+
+        <select
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+          style={inputStyle}
+        >
+          <option value="guest">Guest</option>
+          <option value="host">Host</option>
+        </select>
 
         <button onClick={handleSignup} style={buttonStyle}>
           Signup

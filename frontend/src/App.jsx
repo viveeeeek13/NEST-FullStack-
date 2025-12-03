@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import AddProperty from "./pages/AddProperty";
+import PropertyDetails from "./pages/PropertyDetails";
 import PrivateRoute from "./components/PrivateRoute";
 
 export default function App() {
@@ -30,6 +31,8 @@ export default function App() {
             </PrivateRoute>
           }
         />
+
+        <Route path="/property/:id" element={<PropertyDetails />} />
       </Routes>
     </BrowserRouter>
   );
