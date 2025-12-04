@@ -1,139 +1,165 @@
-import {useState,useEffect} from "react";
+import { useState, useEffect } from "react";
 import API from "../api/api";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
-export default function Dashboard(){
-    const navigate=useNavigate();
-    const [properties,setProperties]=useState([]);
-    const [user,setUser]=useState(null);
-    useEffect(()=>{
-      const token=localStorage.getItem("token");
-      if(!token) return navigate("/login")
-        fetch(`${API}/auth/me`,{
-        headers: { Authorization: `Bearer ${token}`}
-      })
-      .then(async (res) => {
-        if (!res.ok) throw new Error("Unauthorized");
-        const data = await res.json();
-        setUser(data.user);
-      })
-      .catch(() => navigate("/login"));
-    },[navigate]);  
-    
+export default function Dashboard() {
+  const navigate = useNavigate();
+  const { user, loading } = useAuth();
 
-    useEffect(()=>{
-      const token=localStorage.getItem("token");
-        fetch(`${API}/properties`,{
-          headers:{Authorization:`Bearer ${token}`}
-        })
-        .then(res=>res.json())
-        .then(data=>setProperties(data.properties || []))
-        .catch((err)=>console.log(err))
-    },[]);
+  const [properties, setProperties] = useState([]);
+  const [view, setView] = useState("host");
 
-    const handleLogout=()=>{
-      localStorage.removeItem("token")
-      navigate("/login")
+  // Redirect based on role
+  useEffect(() => {
+    if (!loading && user) {
+      if (user.role === "host") {
+        setView("host");
+      } else {
+        setView("guest");
+      }
     }
+  }, [user, loading]);
 
+  // Fetch properties
+  useEffect(() => {
+    const fetchProps = async () => {
+      try {
+        const res = await fetch(`${API}/properties/my-properties`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        });
+        const data = await res.json();
+        setProperties(data.properties || []);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    if (user?.role === "host") fetchProps();
+  }, [user]);
 
+  if (loading) {
     return (
-      <div style={pageStyle}>
-        <div style={navStyle}>
-          <h2 style={{ margin: 0 }}>NEST Dashboard</h2>
-  
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <p style={{ marginRight: "20px", fontWeight: "600" }}>
-              Hi, {user?.name || "Guest"} 👋
-            </p>
-            <button onClick={handleLogout} style={logoutButton}>
-              Logout
-            </button>
-          </div>
-        </div>
-  
-        <h3 style={{ marginTop: "30px" }}>Available Properties</h3>
-        <div style={cardContainer}>
-          {properties.length === 0 ? (
-            <p>No properties found.</p>
-          ) : (
-            properties.map((p) => (
-              <div key={p._id} style={card}>
-                <img
-                  src={(p.images && p.images[0]) || "https://source.unsplash.com/400x300/?house"}
-                  alt="property"
-                  style={cardImg}
-                />
-                <h4 style={{ margin: "10px 0" }}>{p.title}</h4>
-                <p style={{ color: "#555" }}>{p.location}</p>
-                <p style={{ fontWeight: "600", marginTop: "5px" }}>
-                  ₹{p.price}/night
-                </p>
-  
-                <button style={viewButton} onClick={() => navigate(`/property/${p._id}`)}>View Details</button>
-              </div>
-            ))
-          )}
-        </div>
+      <div className="container" style={{ marginTop: "40px", textAlign: "center" }}>
+        <p>Loading...</p>
       </div>
     );
   }
-  const pageStyle = {
-    padding: "30px",
-    fontFamily: "Arial",
-    background: "#fafafa",
-    minHeight: "100vh",
-  };
-  
-  const navStyle = {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    background: "white",
-    padding: "15px 25px",
-    borderRadius: "12px",
-    boxShadow: "0 4px 15px rgba(0,0,0,0.1)",
-  };
-  
-  const logoutButton = {
-    background: "#ff385c",
-    border: "none",
-    padding: "8px 15px",
-    color: "white",
-    borderRadius: "8px",
-    cursor: "pointer",
-  };
-  
-  const cardContainer = {
-    marginTop: "20px",
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-    gap: "20px",
-  };
-  
-  const card = {
-    background: "white",
-    borderRadius: "12px",
-    padding: "10px",
-    boxShadow: "0 4px 15px rgba(0,0,0,0.1)",
-    cursor: "pointer",
-    transition: "0.2s",
-  };
-  
-  const cardImg = {
-    width: "100%",
-    height: "180px",
-    borderRadius: "10px",
-    objectFit: "cover",
-  };
-  
-  const viewButton = {
-    marginTop: "10px",
-    width: "100%",
-    padding: "10px",
-    background: "#333",
-    color: "white",
-    border: "none",
-    borderRadius: "8px",
-    cursor: "pointer",
-  };
+
+  return (
+    <div className="container" style={{ marginTop: "40px", paddingBottom: "80px", maxWidth: "1200px", margin: "40px auto" }}>
+      {/* Header */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
+        <h2 style={{ fontSize: "28px", fontWeight: "800", color: "#222", margin: 0 }}>
+          Welcome back, {user?.name?.split(" ")[0] || "User"}
+        </h2>
+        <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "#ffd180", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px" }}>
+          👤
+        </div>
+      </div>
+
+      {/* View Switch */}
+      <div style={{ background: "#f0f2f5", borderRadius: "20px", padding: "4px", display: "flex", marginBottom: "32px" }}>
+        <button
+          onClick={() => setView("host")}
+          style={{
+            flex: 1,
+            padding: "10px",
+            borderRadius: "16px",
+            border: "none",
+            background: view === "host" ? "white" : "transparent",
+            boxShadow: view === "host" ? "0 2px 8px rgba(0,0,0,0.1)" : "none",
+            fontWeight: "600",
+            color: view === "host" ? "#222" : "#717171",
+            cursor: "pointer",
+          }}
+        >
+          Host View
+        </button>
+
+        <button
+          onClick={() => setView("guest")}
+          style={{
+            flex: 1,
+            padding: "10px",
+            borderRadius: "16px",
+            border: "none",
+            background: view === "guest" ? "white" : "transparent",
+            boxShadow: view === "guest" ? "0 2px 8px rgba(0,0,0,0.1)" : "none",
+            fontWeight: "600",
+            color: view === "guest" ? "#222" : "#717171",
+            cursor: "pointer",
+          }}
+        >
+          Guest View
+        </button>
+      </div>
+
+      {/* Host Section */}
+      {view === "host" ? (
+        <>
+          {/* Earnings Card */}
+          <div style={{
+            background: "#4285f4",
+            color: "white",
+            borderRadius: "24px",
+            padding: "24px",
+            marginBottom: "24px",
+            boxShadow: "0 8px 20px rgba(66, 133, 244, 0.3)"
+          }}>
+            <p style={{ margin: 0, opacity: 0.9 }}>Upcoming Earnings</p>
+            <h1 style={{ fontSize: "42px", fontWeight: "700", margin: "8px 0" }}>$1,250.00</h1>
+            <p style={{ margin: 0, opacity: 0.9 }}>Based on your next 3 bookings</p>
+          </div>
+
+          {/* Properties */}
+          <h3 style={{ margin: "0 0 16px 0", fontSize: "20px", fontWeight: "700" }}>My Listings</h3>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))", gap: "20px" }}>
+            {properties.length === 0 ? (
+              <p>No properties listed yet.</p>
+            ) : (
+              properties.map((p) => (
+                <div key={p._id} onClick={() => navigate(`/property/${p._id}`)} style={{ cursor: "pointer" }}>
+                  <img
+                    src={p.images?.[0] || "https://source.unsplash.com/400x300/?house"}
+                    alt=""
+                    style={{ width: "100%", height: "140px", borderRadius: "16px", objectFit: "cover" }}
+                  />
+                  <h4 style={{ margin: "8px 0 0 0", fontWeight: "600" }}>{p.title}</h4>
+                </div>
+              ))
+            )}
+          </div>
+        </>
+      ) : (
+        <div style={{ textAlign: "center", padding: "40px 0", color: "#717171" }}>
+          <p>Guest view is under construction 🚧</p>
+        </div>
+      )}
+
+      {/* Floating Button */}
+      {user?.role === "host" && (
+        <button
+          onClick={() => navigate("/add-property")}
+          style={{
+            position: "fixed",
+            bottom: "30px",
+            right: "30px",
+            width: "60px",
+            height: "60px",
+            borderRadius: "50%",
+            background: "#4285f4",
+            color: "white",
+            border: "none",
+            fontSize: "32px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            cursor: "pointer",
+          }}
+        >
+          +
+        </button>
+      )}
+    </div>
+  );
+}

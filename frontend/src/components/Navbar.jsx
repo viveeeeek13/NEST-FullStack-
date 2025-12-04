@@ -1,41 +1,76 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+
 export default function Navbar() {
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+  const { isLoggedIn, logout, user } = useAuth();
+
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    logout();
     navigate("/login");
   };
+
   return (
     <nav style={{
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
-      padding: "12px 20px",
-      borderBottom: "1px solid #eee",
-      marginBottom: 20
+      padding: "16px 40px",
+      background: "white",
     }}>
-      <div style={{ fontWeight: 700, fontSize: 20 }}>
-        <Link to="/" style={{ color: "inherit", textDecoration: "none" }}>
-          NEST 🏡
+      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+        <Link to="/" style={{
+          color: "#1a73e8",
+          textDecoration: "none",
+          fontWeight: "800",
+          fontSize: "24px",
+          display: "flex",
+          alignItems: "center",
+          gap: "5px"
+        }}>
+          <span style={{ fontSize: "24px" }}>⌂</span> NEST
         </Link>
       </div>
-      <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-        <Link to="/dashboard">Dashboard</Link>
-        <Link to="/add-property">Add Property</Link>
-        {!token ? (
+
+      <div style={{ display: "flex", gap: 20, alignItems: "center" }}>
+        {!isLoggedIn ? (
           <>
-            <Link to="/login">Login</Link>
-            <Link to="/signup">Signup</Link>
+            <Link to="/login" style={{ fontWeight: "500", color: "#222" }}>Log in</Link>
+            <Link to="/signup" style={{
+              padding: "10px 20px",
+              background: "#1a73e8",
+              color: "white",
+              borderRadius: "25px",
+              fontWeight: "600",
+              fontSize: "14px"
+            }}>
+              Sign Up
+            </Link>
           </>
         ) : (
-          <button onClick={handleLogout} style={{
-            padding: "8px 12px", borderRadius: 6, border: "none", cursor: "pointer",
-            background: "#ef4444", color: "white"
-          }}>
-            Logout
-          </button>
+          <>
+            <Link
+              to={user?.role === "host" ? "/host-dashboard" : "/guest-dashboard"}
+              style={{ fontWeight: "500", color: "#222" }}
+            >
+              {user?.role === "host" ? "Host Dashboard" : "My Trips"}
+            </Link>
+            {user?.role === "host" && (
+              <Link to="/add-property" style={{ fontWeight: "500", color: "#222" }}>Add Property</Link>
+            )}
+            <button onClick={handleLogout} style={{
+              padding: "8px 16px",
+              borderRadius: "20px",
+              border: "1px solid #ddd",
+              cursor: "pointer",
+              background: "white",
+              color: "#222",
+              fontWeight: "500"
+            }}>
+              Logout
+            </button>
+          </>
         )}
       </div>
     </nav>

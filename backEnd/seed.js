@@ -1,0 +1,288 @@
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+dotenv.config();
+
+const PropertySchema = new mongoose.Schema({
+  title: String,
+  description: String,
+  price: Number,
+  location: String,
+  guests: Number,
+  amenities: [String],
+  images: [String],
+  host: String,
+});
+
+const Property = mongoose.model("Property", PropertySchema);
+
+const properties = [
+  {
+    title: "Modern 2BHK Apartment",
+    description: "Fully furnished 2BHK perfect for small families and couples.",
+    price: 18000,
+    location: "Mumbai, Andheri West",
+    guests: 4,
+    amenities: ["WiFi", "AC", "Parking", "TV", "Kitchen"],
+    images: ["https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800"],
+    host: "Amit Sharma",
+  },
+  {
+    title: "1BHK Cozy Flat",
+    description: "Ideal for bachelors, near metro and market.",
+    price: 9500,
+    location: "Delhi, Saket",
+    guests: 2,
+    amenities: ["WiFi", "Balcony"],
+    images: ["https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800"],
+    host: "Riya Mehta",
+  },
+  {
+    title: "Luxury Villa with Lawn",
+    description: "Spacious villa with a private garden and parking.",
+    price: 45000,
+    location: "Bangalore, Whitefield",
+    guests: 6,
+    amenities: ["Garden", "AC", "Parking"],
+    images: ["https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800"],
+    host: "Vikram Singh",
+  },
+  {
+    title: "Affordable PG Room",
+    description: "Furnished PG with food included. Ideal for students.",
+    price: 6000,
+    location: "Pune, Hinjewadi",
+    guests: 1,
+    amenities: ["Food", "WiFi", "Laundry"],
+    images: ["https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800"],
+    host: "Rohan Joshi",
+  },
+  {
+    title: "Lake View Studio",
+    description: "Beautiful studio facing the lake. Peaceful neighborhood.",
+    price: 15000,
+    location: "Udaipur, Fateh Sagar",
+    guests: 2,
+    amenities: ["WiFi", "Balcony", "AC"],
+    images: ["https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800"],
+    host: "Sana Ali",
+  },
+  {
+    title: "3BHK Premium Apartment",
+    description: "Perfect for families, gym and pool included.",
+    price: 32000,
+    location: "Hyderabad, Gachibowli",
+    guests: 5,
+    amenities: ["Gym", "Pool", "Parking", "AC"],
+    images: ["https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800"],
+    host: "Krishna Rao",
+  },
+  {
+    title: "Furnished 1RK",
+    description: "Compact and affordable 1RK with all basic amenities.",
+    price: 7000,
+    location: "Mumbai, Dadar",
+    guests: 2,
+    amenities: ["WiFi", "TV"],
+    images: ["https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800"],
+    host: "Neha Patil",
+  },
+  {
+    title: "Penthouse With Terrace",
+    description: "Exclusive penthouse with private terrace and skyline view.",
+    price: 55000,
+    location: "Kolkata, Salt Lake",
+    guests: 4,
+    amenities: ["Terrace", "AC", "Lift"],
+    images: ["https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800"],
+    host: "Arjun Das",
+  },
+  {
+    title: "Budget Room",
+    description: "Clean single room for boys, safe area.",
+    price: 5000,
+    location: "Patna, Boring Road",
+    guests: 1,
+    amenities: ["Fan", "Bed"],
+    images: ["https://images.unsplash.com/photo-1540518614846-7eded433c457?w=800"],
+    host: "Suresh Kumar",
+  },
+  {
+    title: "2BHK Semi-Furnished Flat",
+    description: "Perfect for small families, great connectivity.",
+    price: 14000,
+    location: "Jaipur, Mansarovar",
+    guests: 4,
+    amenities: ["Parking", "Kitchen"],
+    images: ["https://images.unsplash.com/photo-1556912173-46c336c7fd55?w=800"],
+    host: "Priya Singh",
+  },
+  {
+    title: "Luxury Farmhouse",
+    description: "Premium farmhouse for long-term stays.",
+    price: 70000,
+    location: "Gurgaon, Sohna Road",
+    guests: 10,
+    amenities: ["Pool", "Garden", "Parking"],
+    images: ["https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800"],
+    host: "Deepak Gupta",
+  },
+  {
+    title: "Mountain View Cottage",
+    description: "Beautiful cottage surrounded by nature.",
+    price: 20000,
+    location: "Manali, Old Manali",
+    guests: 4,
+    amenities: ["Heater", "Balcony", "WiFi"],
+    images: ["https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=800"],
+    host: "Karan Thakur",
+  },
+  {
+    title: "Single Room PG",
+    description: "Girls PG with meals included.",
+    price: 8500,
+    location: "Chennai, Velachery",
+    guests: 1,
+    amenities: ["Food", "WiFi", "Locker"],
+    images: ["https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800"],
+    host: "Meena Kumari",
+  },
+  {
+    title: "Sea Facing Apartment",
+    description: "Modern apartment with a stunning sea view.",
+    price: 38000,
+    location: "Goa, Calangute",
+    guests: 3,
+    amenities: ["AC", "Pool", "Balcony"],
+    images: ["https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800"],
+    host: "Jason Fernandez",
+  },
+  {
+    title: "2BHK with Workspace",
+    description: "Ideal for remote workers.",
+    price: 20000,
+    location: "Bangalore, Koramangala",
+    guests: 3,
+    amenities: ["WiFi", "Desk", "AC"],
+    images: ["https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800"],
+    host: "Raghav Rao",
+  },
+  {
+    title: "Serviced Apartment",
+    description: "Hotel-style serviced apartment for executives.",
+    price: 30000,
+    location: "Delhi, Connaught Place",
+    guests: 2,
+    amenities: ["Room Service", "WiFi", "AC"],
+    images: ["https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800"],
+    host: "Kabir Malhotra",
+  },
+  {
+    title: "Small Studio Room",
+    description: "Affordable studio for students.",
+    price: 6000,
+    location: "Lucknow, Gomti Nagar",
+    guests: 1,
+    amenities: ["Fan", "Bed"],
+    images: ["https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=800"],
+    host: "Amit Verma",
+  },
+  {
+    title: "4BHK Independent House",
+    description: "Large home suitable for big families.",
+    price: 28000,
+    location: "Nagpur, Civil Lines",
+    guests: 7,
+    amenities: ["Parking", "Garden"],
+    images: ["https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800"],
+    host: "Ritesh Sharma",
+  },
+  {
+    title: "Compact 1BHK",
+    description: "Best for working professionals.",
+    price: 10000,
+    location: "Bhopal, Arera Colony",
+    guests: 2,
+    amenities: ["WiFi", "Kitchen"],
+    images: ["https://images.unsplash.com/photo-1536376072261-38c75010e6c9?w=800"],
+    host: "Navya Patel",
+  },
+  {
+    title: "Premium Studio Loft",
+    description: "Stylish loft with wooden interiors.",
+    price: 22000,
+    location: "Pune, Koregaon Park",
+    guests: 2,
+    amenities: ["AC", "WiFi", "Parking"],
+    images: ["https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800"],
+    host: "Raj Malhotra",
+  },
+  {
+    title: "2BHK Furnished Flat",
+    description: "Furnished home with all appliances.",
+    price: 17000,
+    location: "Chandigarh, Sector 22",
+    guests: 4,
+    amenities: ["AC", "TV", "Parking"],
+    images: ["https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800"],
+    host: "Harpreet Singh",
+  },
+  {
+    title: "Studio with Rooftop Access",
+    description: "Beautiful rooftop overlooking the city.",
+    price: 16000,
+    location: "Indore, Vijay Nagar",
+    guests: 2,
+    amenities: ["Rooftop", "WiFi"],
+    images: ["https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=800"],
+    host: "Komal Jain",
+  },
+  {
+    title: "Budget Apartment",
+    description: "Simple clean apartment in a peaceful area.",
+    price: 8000,
+    location: "Ranchi, Harmu",
+    guests: 3,
+    amenities: ["Parking"],
+    images: ["https://images.unsplash.com/photo-1600607687644-c7171b42498b?w=800"],
+    host: "Sunil Kumar",
+  },
+  {
+    title: "Hill View Cabin",
+    description: "Perfect retreat for nature lovers.",
+    price: 18000,
+    location: "Ooty, Doddabetta",
+    guests: 3,
+    amenities: ["Heater", "Balcony", "WiFi"],
+    images: ["https://images.unsplash.com/photo-1542718610-a1d656d1884c?w=800"],
+    host: "Rakesh Pillai",
+  },
+  {
+    title: "Smart Home Apartment",
+    description: "Voice-controlled smart home for tech lovers.",
+    price: 35000,
+    location: "Ahmedabad, SG Highway",
+    guests: 4,
+    amenities: ["Smart Lights", "AC", "WiFi"],
+    images: ["https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=800"],
+    host: "Bhavesh Shah",
+  }
+];
+async function seedDB() {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("MongoDB Connected");
+
+    await Property.deleteMany({});
+    console.log("Old properties removed");
+
+    await Property.insertMany(properties);
+    console.log("25 New properties added ✔");
+
+    process.exit();
+  } catch (error) {
+    console.error(error);
+    process.exit(1);
+  }
+}
+
+seedDB();

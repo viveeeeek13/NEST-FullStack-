@@ -15,6 +15,7 @@ app.use(
         process.env.CLIENT_URL,
         "http://localhost:5173",
         "http://localhost:5174",
+        "http://localhost:5175",
       ].filter(Boolean);
       if (!origin || allowed.includes(origin)) return callback(null, true);
       return callback(new Error("Not allowed by CORS"));
