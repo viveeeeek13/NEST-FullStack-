@@ -19,8 +19,8 @@ const userSchema = new mongoose.Schema({
 
   role: {
     type: String,
-    enum: ["host", "guest"],
-    default: "guest",
+    enum: ["user", "host", "guest"],
+    default: "user",
   }
 }, { timestamps: true });
 

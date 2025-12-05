@@ -11,6 +11,8 @@ export default function PropertyDetails() {
     const [checkOut, setCheckOut] = useState("");
     const [guests, setGuests] = useState(2);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [bookingMessage, setBookingMessage] = useState("");
+    const [isBooking, setIsBooking] = useState(false);
 
     useEffect(() => {
         fetch(`${API}/properties/${id}`)
@@ -24,6 +26,66 @@ export default function PropertyDetails() {
                 setLoading(false);
             });
     }, [id]);
+
+    const handleReserve = async () => {
+        // Validate dates
+        if (!checkIn || !checkOut) {
+            setBookingMessage("Please select check-in and check-out dates");
+            return;
+        }
+
+        const checkInDate = new Date(checkIn);
+        const checkOutDate = new Date(checkOut);
+
+        if (checkOutDate <= checkInDate) {
+            setBookingMessage("Check-out date must be after check-in date");
+            return;
+        }
+
+        setIsBooking(true);
+        setBookingMessage("");
+
+        try {
+            const token = localStorage.getItem("token");
+
+            if (!token) {
+                setBookingMessage("Please login to make a reservation");
+                setTimeout(() => navigate("/login"), 2000);
+                return;
+            }
+
+            const nights = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
+            const totalPrice = property.price * nights + 125 + 213; // Including fees
+
+            const res = await fetch(`${API}/bookings`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    propertyId: id,
+                    checkIn,
+                    checkOut,
+                    guests,
+                    totalPrice
+                })
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                setBookingMessage("✅ Booking confirmed! Redirecting...");
+                setTimeout(() => navigate("/dashboard"), 2000);
+            } else {
+                setBookingMessage(data.message || "Booking failed. Please try again.");
+            }
+        } catch (err) {
+            setBookingMessage("Something went wrong. Please try again.");
+        } finally {
+            setIsBooking(false);
+        }
+    };
 
     if (loading) {
         return (
@@ -261,20 +323,47 @@ export default function PropertyDetails() {
                                 </select>
                             </div>
 
+                            {/* Booking Message */}
+                            {bookingMessage && (
+                                <div style={{
+                                    padding: "12px",
+                                    borderRadius: "8px",
+                                    marginBottom: "16px",
+                                    background: bookingMessage.includes("✅") ? "#e8f5e9" : "#ffebee",
+                                    color: bookingMessage.includes("✅") ? "#2e7d32" : "#c62828",
+                                    fontSize: "14px",
+                                    textAlign: "center",
+                                    fontWeight: "500"
+                                }}>
+                                    {bookingMessage}
+                                </div>
+                            )}
+
                             {/* Reserve Button */}
-                            <button style={{
-                                width: "100%",
-                                padding: "14px",
-                                background: "#1a73e8",
-                                color: "white",
-                                border: "none",
-                                borderRadius: "8px",
-                                fontSize: "16px",
-                                fontWeight: "600",
-                                cursor: "pointer",
-                                marginBottom: "16px"
-                            }}>
-                                Reserve
+                            <button
+                                onClick={handleReserve}
+                                disabled={isBooking}
+                                style={{
+                                    width: "100%",
+                                    padding: "14px",
+                                    background: isBooking ? "#ccc" : "#FF385C",
+                                    color: "white",
+                                    border: "none",
+                                    borderRadius: "8px",
+                                    fontSize: "16px",
+                                    fontWeight: "600",
+                                    cursor: isBooking ? "not-allowed" : "pointer",
+                                    marginBottom: "16px",
+                                    transition: "all 0.3s ease"
+                                }}
+                                onMouseEnter={(e) => {
+                                    if (!isBooking) e.currentTarget.style.background = "#E31C5F";
+                                }}
+                                onMouseLeave={(e) => {
+                                    if (!isBooking) e.currentTarget.style.background = "#FF385C";
+                                }}
+                            >
+                                {isBooking ? "Processing..." : "Reserve"}
                             </button>
 
                             <p style={{ textAlign: "center", fontSize: "13px", color: "#717171", marginBottom: "20px" }}>

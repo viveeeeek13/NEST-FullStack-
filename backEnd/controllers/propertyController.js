@@ -38,7 +38,16 @@ export const createProperty = async (req, res) => {
 
 export const getAllProperties = async (req, res) => {
   try {
-    const properties = await Property.find().populate("host", "name email");
+    const { search, location } = req.query;
+    let query = {};
+
+    // Search by location if provided
+    if (search || location) {
+      const searchTerm = search || location;
+      query.location = { $regex: searchTerm, $options: "i" };
+    }
+
+    const properties = await Property.find(query).populate("host", "name email");
     return res.json({ properties });
   } catch (err) {
     return res

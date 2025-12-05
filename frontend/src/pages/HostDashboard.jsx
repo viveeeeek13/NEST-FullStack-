@@ -32,123 +32,307 @@ export default function HostDashboard() {
     }, []);
 
     return (
-        <div className="container" style={{ marginTop: "40px", paddingBottom: "80px", maxWidth: "1200px", margin: "40px auto" }}>
-            {/* Header */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
-                <h2 style={{ fontSize: "28px", fontWeight: "800", color: "#222", margin: 0 }}>
-                    Welcome back, {user?.name ? user.name.split(" ")[0] : "Host"}
-                </h2>
-                <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "#ffd180", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px" }}>
-                    👤
-                </div>
-            </div>
-
-            {/* Stats Card - Earnings */}
+        <div style={{
+            minHeight: "100vh",
+            position: "relative",
+            backgroundImage: "url('https://images.unsplash.com/photo-1600596542815-27b88e35eabb?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundAttachment: "fixed"
+        }}>
+            {/* Dark Overlay */}
             <div style={{
-                background: "#4285f4",
-                color: "white",
-                borderRadius: "24px",
-                padding: "24px",
-                marginBottom: "24px",
-                boxShadow: "0 8px 20px rgba(66, 133, 244, 0.3)"
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: "rgba(0, 0, 0, 0.5)",
+                zIndex: 0
+            }}></div>
+
+            {/* Content Container */}
+            <div style={{
+                position: "relative",
+                zIndex: 1,
+                maxWidth: "400px",
+                margin: "0 auto",
+                padding: "20px",
+                paddingBottom: "80px"
             }}>
-                <p style={{ margin: 0, opacity: 0.9, fontSize: "14px" }}>Upcoming Earnings</p>
-                <h1 style={{ fontSize: "42px", fontWeight: "700", margin: "8px 0" }}>$1,250.00</h1>
-                <p style={{ margin: 0, opacity: 0.9, fontSize: "14px" }}>Based on your next 3 bookings</p>
-            </div>
-
-            {/* Secondary Stats */}
-            <div style={{ display: "flex", gap: "16px", marginBottom: "32px" }}>
-                <div style={{ flex: 1, background: "#f7f7f7", borderRadius: "20px", padding: "20px" }}>
-                    <p style={{ margin: "0 0 8px 0", color: "#717171", fontSize: "14px" }}>Total Bookings</p>
-                    <h3 style={{ margin: 0, fontSize: "24px", fontWeight: "700", color: "#222" }}>28</h3>
+                {/* Header */}
+                <div style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    padding: "20px 0",
+                    color: "white"
+                }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                        <span style={{ fontSize: "24px" }}>🏠</span>
+                        <h1 style={{ margin: 0, fontSize: "20px", fontWeight: "700" }}>NEST</h1>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+                        <button style={{
+                            background: "transparent",
+                            border: "none",
+                            color: "white",
+                            fontSize: "20px",
+                            cursor: "pointer"
+                        }}>🔔</button>
+                        <div style={{
+                            width: "36px",
+                            height: "36px",
+                            borderRadius: "50%",
+                            background: "white",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontSize: "18px"
+                        }}>👤</div>
+                    </div>
                 </div>
-                <div style={{ flex: 1, background: "#f7f7f7", borderRadius: "20px", padding: "20px" }}>
-                    <p style={{ margin: "0 0 8px 0", color: "#717171", fontSize: "14px" }}>5-Star Reviews</p>
-                    <h3 style={{ margin: 0, fontSize: "24px", fontWeight: "700", color: "#222" }}>15</h3>
-                </div>
-            </div>
 
-            {/* Upcoming Bookings */}
-            <div style={{ background: "#f7f7f7", borderRadius: "24px", padding: "24px", marginBottom: "32px" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
-                    <h3 style={{ margin: 0, fontSize: "18px", fontWeight: "700", color: "#222" }}>Upcoming Bookings</h3>
-                    <button style={{ background: "none", border: "none", color: "#4285f4", fontWeight: "600", cursor: "pointer" }}>View All</button>
+                {/* Welcome Section */}
+                <div style={{ marginBottom: "24px", color: "white" }}>
+                    <h2 style={{ fontSize: "28px", fontWeight: "700", margin: "0 0 4px 0" }}>
+                        Welcome, {user?.name ? user.name.split(" ")[0] : "Alex"}
+                    </h2>
+                    <p style={{ margin: 0, fontSize: "14px", opacity: 0.9 }}>
+                        Here's your dashboard overview for today.
+                    </p>
                 </div>
 
-                <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-                    {[
-                        { name: "Sarah L.", date: "Oct 24-28", place: "Seaside Villa", img: "https://randomuser.me/api/portraits/women/44.jpg" },
-                        { name: "Mark J.", date: "Nov 02-05", place: "Downtown Loft", img: "https://randomuser.me/api/portraits/men/32.jpg" }
-                    ].map((booking, i) => (
-                        <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                                <img src={booking.img} alt={booking.name} style={{ width: "48px", height: "48px", borderRadius: "50%" }} />
+                {/* Analytics Card */}
+                <div className="glass-card" style={{
+                    padding: "20px",
+                    marginBottom: "20px",
+                    color: "white"
+                }}>
+                    <div style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        marginBottom: "16px"
+                    }}>
+                        <h3 style={{ margin: 0, fontSize: "18px", fontWeight: "600" }}>Analytics</h3>
+                        <select style={{
+                            background: "rgba(255, 255, 255, 0.1)",
+                            border: "1px solid rgba(255, 255, 255, 0.2)",
+                            borderRadius: "8px",
+                            padding: "4px 8px",
+                            color: "white",
+                            fontSize: "12px",
+                            cursor: "pointer"
+                        }}>
+                            <option>This Month</option>
+                            <option>Last Month</option>
+                            <option>This Year</option>
+                        </select>
+                    </div>
+
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                        <div>
+                            <h2 style={{ fontSize: "36px", fontWeight: "700", margin: "0 0 4px 0" }}>$4,250</h2>
+                            <p style={{ margin: 0, fontSize: "13px", opacity: 0.8 }}>Earnings</p>
+                        </div>
+                        <div>
+                            <h2 style={{ fontSize: "36px", fontWeight: "700", margin: "0 0 4px 0" }}>12</h2>
+                            <p style={{ margin: 0, fontSize: "13px", opacity: 0.8 }}>Bookings</p>
+                        </div>
+                    </div>
+
+                    <div style={{ marginTop: "16px" }}>
+                        <h2 style={{ fontSize: "36px", fontWeight: "700", margin: "0 0 4px 0" }}>78%</h2>
+                        <p style={{ margin: 0, fontSize: "13px", opacity: 0.8 }}>Occupancy</p>
+                    </div>
+                </div>
+
+                {/* Recent Reviews */}
+                <div className="glass-card" style={{
+                    padding: "20px",
+                    marginBottom: "20px",
+                    color: "white"
+                }}>
+                    <div style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        marginBottom: "12px"
+                    }}>
+                        <h3 style={{ margin: 0, fontSize: "18px", fontWeight: "600" }}>Recent Reviews</h3>
+                        <div style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "4px",
+                            fontSize: "16px",
+                            fontWeight: "600"
+                        }}>
+                            <span style={{ color: "#fbbf24" }}>⭐</span>
+                            <span>4.92</span>
+                        </div>
+                    </div>
+
+                    <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                        <div style={{ fontSize: "14px", lineHeight: "1.5" }}>
+                            <p style={{ margin: "0 0 4px 0", opacity: 0.95 }}>
+                                "An absolutely stunning place. Will book again!"
+                            </p>
+                            <p style={{ margin: 0, fontSize: "12px", opacity: 0.7 }}>- Jane D.</p>
+                        </div>
+                        <div style={{ fontSize: "14px", lineHeight: "1.5" }}>
+                            <p style={{ margin: "0 0 4px 0", opacity: 0.95 }}>
+                                "Perfect location and amazing host."
+                            </p>
+                            <p style={{ margin: 0, fontSize: "12px", opacity: 0.7 }}>- Mark R.</p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* My Listings */}
+                <div className="glass-card" style={{
+                    padding: "20px",
+                    marginBottom: "20px",
+                    color: "white"
+                }}>
+                    <div style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        marginBottom: "16px"
+                    }}>
+                        <h3 style={{ margin: 0, fontSize: "18px", fontWeight: "600" }}>My Listings</h3>
+                        <button
+                            onClick={() => navigate("/add-property")}
+                            style={{
+                                background: "#4285f4",
+                                border: "none",
+                                borderRadius: "8px",
+                                padding: "6px 12px",
+                                color: "white",
+                                fontSize: "13px",
+                                fontWeight: "600",
+                                cursor: "pointer"
+                            }}
+                        >
+                            Add New
+                        </button>
+                    </div>
+
+                    <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                        {properties.length === 0 ? (
+                            <p style={{ margin: 0, fontSize: "14px", opacity: 0.7 }}>
+                                No properties listed yet.
+                            </p>
+                        ) : (
+                            properties.slice(0, 2).map((p, idx) => (
+                                <div
+                                    key={p._id}
+                                    onClick={() => navigate(`/property/${p._id}`)}
+                                    style={{
+                                        display: "flex",
+                                        gap: "12px",
+                                        cursor: "pointer",
+                                        padding: "8px",
+                                        borderRadius: "12px",
+                                        background: "rgba(255, 255, 255, 0.05)",
+                                        transition: "all 0.3s ease"
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.background = "rgba(255, 255, 255, 0.1)";
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.background = "rgba(255, 255, 255, 0.05)";
+                                    }}
+                                >
+                                    <img
+                                        src={(p.images && p.images[0]) || "https://source.unsplash.com/400x300/?house"}
+                                        alt={p.title}
+                                        style={{
+                                            width: "60px",
+                                            height: "60px",
+                                            borderRadius: "8px",
+                                            objectFit: "cover"
+                                        }}
+                                    />
+                                    <div style={{ flex: 1 }}>
+                                        <h4 style={{
+                                            margin: "0 0 4px 0",
+                                            fontSize: "15px",
+                                            fontWeight: "600"
+                                        }}>
+                                            {p.title}
+                                        </h4>
+                                        <p style={{
+                                            margin: "0 0 4px 0",
+                                            fontSize: "13px",
+                                            opacity: 0.7
+                                        }}>
+                                            {p.location}
+                                        </p>
+                                        <span className="status-badge status-published">
+                                            Published
+                                        </span>
+                                    </div>
+                                </div>
+                            ))
+                        )}
+                    </div>
+                </div>
+
+                {/* Upcoming Bookings */}
+                <div className="glass-card" style={{
+                    padding: "20px",
+                    color: "white"
+                }}>
+                    <h3 style={{ margin: "0 0 16px 0", fontSize: "18px", fontWeight: "600" }}>
+                        Upcoming Bookings
+                    </h3>
+
+                    <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                        {[
+                            { guest: "Emily White", property: "Chic Urban Apartment", dates: "Oct 28 - Nov 2" },
+                            { guest: "David Chen", property: "Sunny Beachfront Villa", dates: "Nov 5 - Nov 10" }
+                        ].map((booking, idx) => (
+                            <div
+                                key={idx}
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                    padding: "12px",
+                                    borderRadius: "12px",
+                                    background: "rgba(255, 255, 255, 0.05)"
+                                }}
+                            >
                                 <div>
-                                    <h4 style={{ margin: 0, fontSize: "16px", fontWeight: "600", color: "#222" }}>{booking.name}</h4>
-                                    <p style={{ margin: "2px 0 0 0", fontSize: "14px", color: "#717171" }}>{booking.place}, {booking.date}</p>
+                                    <h4 style={{
+                                        margin: "0 0 4px 0",
+                                        fontSize: "15px",
+                                        fontWeight: "600"
+                                    }}>
+                                        {booking.property}
+                                    </h4>
+                                    <p style={{
+                                        margin: 0,
+                                        fontSize: "13px",
+                                        opacity: 0.7
+                                    }}>
+                                        Guest: {booking.guest}
+                                    </p>
+                                </div>
+                                <div style={{
+                                    fontSize: "13px",
+                                    opacity: 0.8,
+                                    textAlign: "right"
+                                }}>
+                                    {booking.dates}
                                 </div>
                             </div>
-                            <span style={{ color: "#717171", fontSize: "20px" }}>›</span>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
             </div>
-
-            {/* My Listings */}
-            <div>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
-                    <h3 style={{ margin: 0, fontSize: "20px", fontWeight: "700", color: "#222" }}>My Listings</h3>
-                    <button style={{ background: "none", border: "none", color: "#4285f4", fontWeight: "600", cursor: "pointer" }}>View All</button>
-                </div>
-
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))", gap: "20px" }}>
-                    {properties.length === 0 ? (
-                        <p style={{ gridColumn: "1 / -1", color: "#717171" }}>No properties listed yet.</p>
-                    ) : (
-                        properties.map((p) => (
-                            <div
-                                key={p._id}
-                                style={{ cursor: "pointer" }}
-                                onClick={() => navigate(`/property/${p._id}`)}
-                            >
-                                <img
-                                    src={(p.images && p.images[0]) || "https://source.unsplash.com/400x300/?house"}
-                                    alt="property"
-                                    style={{ width: "100%", height: "140px", borderRadius: "16px", objectFit: "cover", marginBottom: "8px" }}
-                                />
-                                <h4 style={{ margin: 0, fontSize: "16px", fontWeight: "600", color: "#222" }}>{p.title}</h4>
-                                <p style={{ margin: "2px 0 0 0", fontSize: "14px", color: "#717171" }}>Published</p>
-                            </div>
-                        ))
-                    )}
-                </div>
-            </div>
-
-            {/* FAB */}
-            <button
-                onClick={() => navigate("/add-property")}
-                style={{
-                    position: "fixed",
-                    bottom: "30px",
-                    right: "30px",
-                    width: "60px",
-                    height: "60px",
-                    borderRadius: "50%",
-                    background: "#4285f4",
-                    color: "white",
-                    border: "none",
-                    fontSize: "32px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    boxShadow: "0 4px 20px rgba(66, 133, 244, 0.4)",
-                    cursor: "pointer",
-                    zIndex: 100
-                }}
-            >
-                +
-            </button>
         </div>
     );
 }

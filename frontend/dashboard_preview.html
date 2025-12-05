@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEST Host Dashboard - Preview</title>
+    <style>
+        :root {
+            --glass-white: rgba(255, 255, 255, 0.15);
+            --glass-white-hover: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --status-published: #34a853;
+            --status-pending: #fbbc04;
+            --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            min-height: 100vh;
+            position: relative;
+            background-image: url('https://images.unsplash.com/photo-1600596542815-27b88e35eabb?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-bottom: 80px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            color: white;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo h1 {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .notification {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .welcome {
+            margin-bottom: 24px;
+            color: white;
+        }
+
+        .welcome h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .welcome p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .glass-card {
+            background: var(--glass-white);
+            backdrop-filter: blur(10px) saturate(180%);
+            -webkit-backdrop-filter: blur(10px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: var(--shadow-glass);
+            padding: 20px;
+            margin-bottom: 20px;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            background: var(--glass-white-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .card-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        select {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 4px 8px;
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .metric h2 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .metric p {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+        .metric.full {
+            grid-column: 1 / -1;
+            margin-top: 16px;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .star {
+            color: #fbbf24;
+        }
+
+        .review {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .review:last-child {
+            margin-bottom: 0;
+        }
+
+        .review p:first-child {
+            opacity: 0.95;
+            margin-bottom: 4px;
+        }
+
+        .review p:last-child {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .btn-primary {
+            background: #4285f4;
+            border: none;
+            border-radius: 8px;
+            padding: 6px 12px;
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .property-item {
+            display: flex;
+            gap: 12px;
+            padding: 8px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+
+        .property-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .property-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .property-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .property-info {
+            flex: 1;
+        }
+
+        .property-info h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .property-info p {
+            font-size: 13px;
+            opacity: 0.7;
+            margin-bottom: 4px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-published {
+            background: rgba(52, 168, 83, 0.15);
+            color: var(--status-published);
+        }
+
+        .booking-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            margin-bottom: 12px;
+        }
+
+        .booking-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .booking-info h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .booking-info p {
+            font-size: 13px;
+            opacity: 0.7;
+        }
+
+        .booking-date {
+            font-size: 13px;
+            opacity: 0.8;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+    
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <span style="font-size: 24px;">🏠</span>
+                <h1>NEST</h1>
+            </div>
+            <div class="header-right">
+                <button class="notification">🔔</button>
+                <div class="avatar">👤</div>
+            </div>
+        </div>
+
+        <!-- Welcome Section -->
+        <div class="welcome">
+            <h2>Welcome, Alex</h2>
+            <p>Here's your dashboard overview for today.</p>
+        </div>
+
+        <!-- Analytics Card -->
+        <div class="glass-card">
+            <div class="card-header">
+                <h3>Analytics</h3>
+                <select>
+                    <option>This Month</option>
+                    <option>Last Month</option>
+                    <option>This Year</option>
+                </select>
+            </div>
+            <div class="analytics-grid">
+                <div class="metric">
+                    <h2>$4,250</h2>
+                    <p>Earnings</p>
+                </div>
+                <div class="metric">
+                    <h2>12</h2>
+                    <p>Bookings</p>
+                </div>
+            </div>
+            <div class="metric full">
+                <h2>78%</h2>
+                <p>Occupancy</p>
+            </div>
+        </div>
+
+        <!-- Recent Reviews -->
+        <div class="glass-card">
+            <div class="card-header">
+                <h3>Recent Reviews</h3>
+                <div class="rating">
+                    <span class="star">⭐</span>
+                    <span>4.92</span>
+                </div>
+            </div>
+            <div class="review">
+                <p>"An absolutely stunning place. Will book again!"</p>
+                <p>- Jane D.</p>
+            </div>
+            <div class="review">
+                <p>"Perfect location and amazing host."</p>
+                <p>- Mark R.</p>
+            </div>
+        </div>
+
+        <!-- My Listings -->
+        <div class="glass-card">
+            <div class="card-header">
+                <h3>My Listings</h3>
+                <button class="btn-primary">Add New</button>
+            </div>
+            <div class="property-item">
+                <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400" alt="Modern Loft" class="property-img">
+                <div class="property-info">
+                    <h4>Modern Loft in Downtown</h4>
+                    <p>San Francisco</p>
+                    <span class="status-badge status-published">Published</span>
+                </div>
+            </div>
+            <div class="property-item">
+                <img src="https://images.unsplash.com/photo-1542718610-a1d656d1884c?w=400" alt="Cozy Cabin" class="property-img">
+                <div class="property-info">
+                    <h4>Cozy Cabin in the Woods</h4>
+                    <p>Lake Tahoe</p>
+                    <span class="status-badge status-published">Published</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upcoming Bookings -->
+        <div class="glass-card">
+            <h3 style="margin-bottom: 16px;">Upcoming Bookings</h3>
+            <div class="booking-item">
+                <div class="booking-info">
+                    <h4>Chic Urban Apartment</h4>
+                    <p>Guest: Emily White</p>
+                </div>
+                <div class="booking-date">Oct 28 - Nov 2</div>
+            </div>
+            <div class="booking-item">
+                <div class="booking-info">
+                    <h4>Sunny Beachfront Villa</h4>
+                    <p>Guest: David Chen</p>
+                </div>
+                <div class="booking-date">Nov 5 - Nov 10</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
