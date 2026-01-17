@@ -20,8 +20,6 @@ export default function GuestDashboard() {
             })
             .catch(() => navigate("/login"));
     }, [navigate]);
-
-    // Fetch some properties for saved/recommended section
     useEffect(() => {
         fetch(`${API}/properties`)
             .then((res) => res.json())
@@ -40,7 +38,6 @@ export default function GuestDashboard() {
 
     return (
         <div className="container" style={{ marginTop: "40px", paddingBottom: "80px", maxWidth: "1200px", margin: "40px auto" }}>
-            {/* Header */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
                 <h2 style={{ fontSize: "28px", fontWeight: "800", color: "#222", margin: 0 }}>
                     Welcome back, {user?.name ? user.name.split(" ")[0] : "Guest"}
@@ -49,8 +46,6 @@ export default function GuestDashboard() {
                     👤
                 </div>
             </div>
-
-            {/* Upcoming Trips */}
             <div style={{ marginBottom: "32px" }}>
                 <h3 style={{ margin: "0 0 16px 0", fontSize: "20px", fontWeight: "700", color: "#222" }}>Upcoming Trips</h3>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "20px" }}>
@@ -66,8 +61,6 @@ export default function GuestDashboard() {
                     ))}
                 </div>
             </div>
-
-            {/* Past Trips */}
             <div style={{ marginBottom: "32px" }}>
                 <h3 style={{ margin: "0 0 16px 0", fontSize: "20px", fontWeight: "700", color: "#222" }}>Past Trips</h3>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "20px" }}>
@@ -83,8 +76,6 @@ export default function GuestDashboard() {
                     ))}
                 </div>
             </div>
-
-            {/* Saved Properties */}
             <div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
                     <h3 style={{ margin: 0, fontSize: "20px", fontWeight: "700", color: "#222" }}>Saved Properties</h3>
@@ -140,8 +131,6 @@ export default function GuestDashboard() {
                     )}
                 </div>
             </div>
-
-            {/* Search FAB */}
             <button
                 onClick={() => navigate("/")}
                 style={{

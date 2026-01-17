@@ -9,8 +9,6 @@ export default function Dashboard() {
 
   const [properties, setProperties] = useState([]);
   const [view, setView] = useState("host");
-
-  // Redirect based on role
   useEffect(() => {
     if (!loading && user) {
       if (user.role === "host") {
@@ -20,8 +18,6 @@ export default function Dashboard() {
       }
     }
   }, [user, loading]);
-
-  // Fetch properties
   useEffect(() => {
     const fetchProps = async () => {
       try {
@@ -47,7 +43,6 @@ export default function Dashboard() {
 
   return (
     <div className="container" style={{ marginTop: "40px", paddingBottom: "80px", maxWidth: "1200px", margin: "40px auto" }}>
-      {/* Header */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
         <h2 style={{ fontSize: "28px", fontWeight: "800", color: "#222", margin: 0 }}>
           Welcome back, {user?.name?.split(" ")[0] || "User"}
@@ -56,8 +51,6 @@ export default function Dashboard() {
           👤
         </div>
       </div>
-
-      {/* View Switch */}
       <div style={{ background: "#f0f2f5", borderRadius: "20px", padding: "4px", display: "flex", marginBottom: "32px" }}>
         <button
           onClick={() => setView("host")}
@@ -94,10 +87,8 @@ export default function Dashboard() {
         </button>
       </div>
 
-      {/* Host Section */}
       {view === "host" ? (
         <>
-          {/* Earnings Card */}
           <div style={{
             background: "#4285f4",
             color: "white",
@@ -110,8 +101,6 @@ export default function Dashboard() {
             <h1 style={{ fontSize: "42px", fontWeight: "700", margin: "8px 0" }}>$1,250.00</h1>
             <p style={{ margin: 0, opacity: 0.9 }}>Based on your next 3 bookings</p>
           </div>
-
-          {/* Properties */}
           <h3 style={{ margin: "0 0 16px 0", fontSize: "20px", fontWeight: "700" }}>My Listings</h3>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))", gap: "20px" }}>
             {properties.length === 0 ? (
@@ -135,8 +124,6 @@ export default function Dashboard() {
           <p>Guest view is under construction 🚧</p>
         </div>
       )}
-
-      {/* Floating Button */}
       {user?.role === "host" && (
         <button
           onClick={() => navigate("/add-property")}
